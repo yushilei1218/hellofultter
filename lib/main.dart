@@ -3,28 +3,23 @@ import 'package:english_words/english_words.dart';
 import 'package:hellofultter/pac//pra.dart';
 import "package:pull_to_refresh/pull_to_refresh.dart";
 
-
 void main() {
-   var int2 = int.fromEnvironment("1");
+  var int2 = int.fromEnvironment("1");
   var praClass2 = new praClass();
-var inner = praClass2.inner;
+  var inner = praClass2.inner;
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     return new MaterialApp(
       title: "Welcome to Flutter",
       home: new Scaffold(
         appBar: AppBar(
           title: new Text("Welcome to Flutter"),
         ),
-        body: new Center(
-          // child: new Text("hello"),
-          child: RandomWordWidget(),
-        ),
+        body: RandomWordWidget(),
       ),
     );
   }
@@ -45,19 +40,23 @@ class RandomWordState extends State<RandomWordWidget> {
   }
 
   Widget _buildWidget() {
-    return new ListView.builder(
-        padding: EdgeInsets.all(10.0),
-        itemBuilder: (context, index) {
-          if (index.isOdd) {
-            return new Divider();
-          }
-          int i = index ~/ 2;
-          if (i >= _data.length) {
-            _data.addAll(generateWordPairs().take(10));
-          }
-          var data = _data[i];
-          return _buildRow(data);
-        });
+    return new SmartRefresher(
+        onRefresh: (up) {
+
+        },
+        child: new ListView.builder(
+            padding: EdgeInsets.all(10.0),
+            itemBuilder: (context, index) {
+              if (index.isOdd) {
+                return new Divider();
+              }
+              int i = index ~/ 2;
+              if (i >= _data.length) {
+                _data.addAll(generateWordPairs().take(10));
+              }
+              var data = _data[i];
+              return _buildRow(data);
+            }));
   }
 
   Widget _buildRow(WordPair data) {
